@@ -351,3 +351,46 @@
     errorMessageElement.classList.add('d-block');
   }
 })();
+
+document.addEventListener("DOMContentLoaded", function() {
+  const contactForm = document.getElementById("contact-form");
+  
+  contactForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value;
+
+    // Vous pouvez ajouter ici la logique pour envoyer les données du formulaire à votre serveur
+    // Par exemple, utilisez fetch() pour effectuer une requête POST
+
+    // Exemple de requête POST avec fetch (remplacez l'URL par la vôtre)
+    fetch("votre_url_de_traitement.php", {
+      method: "POST",
+      body: JSON.stringify({ name, email, subject, message }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Si l'envoi est réussi, affichez un message de confirmation
+          const sentMessage = document.querySelector(".sent-message");
+          sentMessage.textContent = "Votre message a été envoyé. Merci !";
+          sentMessage.style.display = "block";
+          contactForm.reset();
+        } else {
+          // En cas d'erreur, affichez un message d'erreur
+          const errorMessage = document.querySelector(".error-message");
+          errorMessage.textContent = "Une erreur s'est produite. Veuillez réessayer.";
+          errorMessage.style.display = "block";
+        }
+      })
+      .catch(error => {
+        console.error("Erreur de traitement : ", error);
+      });
+  });
+});
